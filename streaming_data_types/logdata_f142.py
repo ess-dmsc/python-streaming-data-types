@@ -490,8 +490,8 @@ def _serialise_value(
 ):
     # We can use a dictionary to map most numpy types to one of the types defined in the flatbuffer schema
     # but we have to handle strings separately as there are many subtypes
-    if np.issubdtype(value.dtype, np.unicode_) or np.issubdtype(
-        value.dtype, np.string_
+    if np.issubdtype(value.dtype, np.str_) or np.issubdtype(
+        value.dtype, np.bytes_
     ):
         string_serialiser(builder, value, source)
     else:
@@ -501,7 +501,7 @@ def _serialise_value(
             # There are a few numpy types we don't try to handle, for example complex numbers
             raise NotImplementedError(
                 f"Cannot serialise data of type {value.dtype}, must use one of "
-                f"{list(_map_scalar_type_to_serialiser.keys()) + [np.unicode_]}"
+                f"{list(_map_scalar_type_to_serialiser.keys()) + [np.str_]}"
             )
 
 
@@ -539,8 +539,8 @@ LogDataInfo = namedtuple(
 
 def _decode_if_scalar_string(value: np.ndarray) -> Union[str, np.ndarray]:
     if value.ndim == 0 and (
-        np.issubdtype(value.dtype, np.unicode_)
-        or np.issubdtype(value.dtype, np.string_)
+        np.issubdtype(value.dtype, np.str_)
+        or np.issubdtype(value.dtype, np.bytes_)
     ):
         return value.item().decode()
     return value
