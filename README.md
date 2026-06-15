@@ -1,4 +1,5 @@
 # Python Streaming Data Types
+
 Utilities for working with the FlatBuffers schemas used at the European
 Spallation Source ERIC for data transport.
 
@@ -7,7 +8,7 @@ https://github.com/ess-dmsc/streaming-data-types
 ## FlatBuffer Schemas
 
 | name | description                                                                  |
-|------|------------------------------------------------------------------------------|
+| ---- | ---------------------------------------------------------------------------- |
 | hs00 | Histogram schema (deprecated in favour of hs01)                              |
 | hs01 | Histogram schema                                                             |
 | ns10 | NICOS cache entry schema                                                     |
@@ -34,8 +35,10 @@ https://github.com/ess-dmsc/streaming-data-types
 | json | Generic JSON data                                                            |
 | se00 | Arrays with optional timestamps, for example waveform data. Replaces _senv_. |
 | da00 | Scipp-like data arrays, for histograms, etc.                                 |
+| vs00 | Log data à la f144, but for strings                                          |
 
 ### hs00 and hs01
+
 Schema for histogram data. It is one of the more complicated to use schemas.
 It takes a Python dictionary as its input; this dictionary needs to have correctly
 named fields.
@@ -43,6 +46,7 @@ named fields.
 The input histogram data for serialisation and the output deserialisation data
 have the same dictionary "layout".
 Example for a 2-D histogram:
+
 ```json
 hist = {
     "source": "some_source",
@@ -68,9 +72,9 @@ hist = {
     "info": "info_string",
 }
 ```
+
 The arrays passed in for `data`, `errors` and `bin_boundaries` can be NumPy arrays
 or regular lists, but on deserialisation they will be NumPy arrays.
-
 
 ## Developer documentation
 

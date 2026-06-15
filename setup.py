@@ -2,7 +2,9 @@ import os
 
 from setuptools import find_packages, setup
 
-from streaming_data_types._version import version
+version = {}
+with open("streaming_data_types/_version.py") as f:
+    exec(f.read(), version)
 
 DESCRIPTION = "Python utilities for handling ESS streamed data"
 
@@ -18,7 +20,7 @@ except Exception as error:
 
 setup(
     name="ess_streaming_data_types",
-    version=version,
+    version=version["version"],
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
