@@ -1,10 +1,11 @@
 -r requirements.txt
 black
 flake8
+id<1.6 # required by twine but stuck by conan urllib3 requirement
 isort
 pre-commit
 pytest
-tox==3.27.1  # tox 4 seems to be broken at the moment
+tox
 tox-pyenv
 twine
 wheel
