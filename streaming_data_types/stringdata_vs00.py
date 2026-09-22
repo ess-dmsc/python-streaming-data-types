@@ -28,14 +28,14 @@ def deserialise_vs00(buffer):
     return StringData(
         event.SourceName().decode("utf-8"),
         event.Timestamp(),
-        [event.Data(i).decode("utf-8") for i in range(event.DataLength())],
+        event.Data().decode("utf-8"),
     )
 
 
 def serialise_vs00(
     source_name: str,
-    timestamp: int = 0,
-    data: list[str] = None,
+    timestamp: int,
+    data: str,
 ) -> bytes:
     """
     Serialise string data as a vs00 FlatBuffers message.
@@ -45,25 +45,14 @@ def serialise_vs00(
     :param data:
     :return:
     """
-    if data is None:
-        data = [""]
-
     builder = flatbuffers.Builder(1024)
     source = builder.CreateString(source_name)
-    string_offsets = [builder.CreateString(s) for s in data]
-    vs00Message.vs00_StringDataStartDataVector(
-        builder,
-        len(string_offsets),
-    )
-    for offset in reversed(string_offsets):
-        builder.PrependUOffsetTRelative(offset)
-
-    data_vector = builder.EndVector()
+    data_offset = builder.CreateString(data)
 
     vs00Message.vs00_StringDataStart(builder)
     vs00Message.vs00_StringDataAddSourceName(builder, source)
     vs00Message.vs00_StringDataAddTimestamp(builder, timestamp)
-    vs00Message.vs00_StringDataAddData(builder, data_vector)
+    vs00Message.vs00_StringDataAddData(builder, data_offset)
 
     end = vs00Message.vs00_StringDataEnd(builder)
     builder.Finish(end, file_identifier=FILE_IDENTIFIER)

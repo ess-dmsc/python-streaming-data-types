@@ -48,26 +48,11 @@ class vs00_StringData(object):
         return 0
 
     # vs00_StringData
-    def Data(self, j):
+    def Data(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
-            a = self._tab.Vector(o)
-            return self._tab.String(
-                a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 4)
-            )
-        return ""
-
-    # vs00_StringData
-    def DataLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
-
-    # vs00_StringData
-    def DataIsNone(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
-        return o == 0
+            return self._tab.String(o + self._tab.Pos)
+        return None
 
 
 def vs00_StringDataStart(builder):
@@ -104,14 +89,6 @@ def vs00_StringDataAddData(builder, data):
 
 def AddData(builder, data):
     vs00_StringDataAddData(builder, data)
-
-
-def vs00_StringDataStartDataVector(builder, numElems):
-    return builder.StartVector(4, numElems, 4)
-
-
-def StartDataVector(builder, numElems):
-    return vs00_StringDataStartDataVector(builder, numElems)
 
 
 def vs00_StringDataEnd(builder):
